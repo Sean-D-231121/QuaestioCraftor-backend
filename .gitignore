@@ -1,0 +1,67 @@
+.env
+# --- Python virtual environment ---
+.venv/
+venv/
+env/
+ENV/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pdb
+
+# --- IDE / Editor files ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS-generated files ---
+.DS_Store
+Thumbs.db
+
+# --- Logs and caches ---
+*.log
+*.out
+*.err
+.cache/
+logs/
+
+# --- Jupyter Notebook checkpoints ---
+.ipynb_checkpoints/
+
+# --- Build / distribution ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Environment and secrets ---
+.env
+.env.local
+.env.production
+*.bak
+*.swp
+*.tmp
+*~
+
+# --- Model / data files (optional, if large or auto-generated) ---
+/data/
+models/
+checkpoints/
+outputs/
+runs/
+results/
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.joblib
+*.npy
+*.npz
+*.csv
+*.jsonl
+*.sqlite3
+
+# --- Dependencies (will be recreated via requirements.txt or pyproject.toml) ---
+pip-wheel-metadata/
