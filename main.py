@@ -19,12 +19,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class PromptRequest(BaseModel):
-    prompt: str
+class QuizRequest(BaseModel):
+    quiz_type: str
+    difficulty: str
+    question_count: int
+    topic: str
     max_tokens: Optional[int] = 2000
 
 @app.post("/generate")
-async def generate(req: PromptRequest):
+async def generate(req: QuizRequest):
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY not set")
@@ -32,11 +35,22 @@ async def generate(req: PromptRequest):
     # create client (reads api_key from env or pass api_key=api_key)
     client = OpenAI(api_key=api_key)
 
+    prompt = f"""
+    Generate {req.question_count} {req.difficulty}-level {req.quiz_type} quiz questions about "{req.topic}".
+    Please make sure that questions are for mcq are more random and questions.
+    For True/False make a nice ratio of True questions and false questions.
+    Return the result strictly as a JSON array. Each object should have:
+    - "question": the question text
+    - "options": an array of answers (for MCQ; omit for True/False or Short answer)
+    - "answer": the correct answer
+    - "type": "MCQ", "True/False"
+    Ensure the output is valid JSON with no explanations.
+    """
     
     try:
         resp = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": req.prompt}],
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=req.max_tokens,
             temperature=0.7,
         )
@@ -45,8 +59,9 @@ async def generate(req: PromptRequest):
         # Try to parse the text as JSON
         try:
             quiz_json = json.loads(text)
-            return quiz_json  # Return the parsed JSON directly
+            return {"quiz": quiz_json}  # Return the parsed JSON directly 
         except json.JSONDecodeError:
             raise HTTPException(status_code=500, detail="Response from OpenAI is not valid JSON")
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
