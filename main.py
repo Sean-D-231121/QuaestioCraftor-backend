@@ -39,9 +39,9 @@ async def generate(req: QuizRequest):
     Generate {req.question_count} {req.difficulty}-level {req.quiz_type} quiz questions about "{req.topic}".
     Please make sure that questions are for mcq are more random and questions.
     For True/False make a nice ratio of True questions and false questions.
-    - If it is MCQ only include MCQ questions 
-    - If it is True/False only include True/False questions
-    - If it is Mixed Include both MCQ and True/False questions
+    - If the quiz type is MCQ only include MCQ questions 
+    - If the quiz type is True/False only include True/False questions
+    - If the quiz type is Mixed Include both MCQ and True/False questions
     Return the result strictly as a JSON array. Each object should have:
     - "question": the question text
     - "options": an array of answers (for MCQ; omit for True/False)
