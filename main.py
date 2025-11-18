@@ -26,6 +26,11 @@ class QuizRequest(BaseModel):
     question_count: int
     topic: str
 
+
+@app.get("/ping")
+async def ping():
+    return {"status": "ok"}
+
 @app.post("/generate")
 async def generate(req: QuizRequest):
     api_key = os.getenv("OPENAI_API_KEY")
